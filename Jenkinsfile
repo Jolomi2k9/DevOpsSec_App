@@ -47,6 +47,7 @@ pipeline {
                 }   
             }
         }
+                
 
         stage("Deploy") {
             steps {
@@ -56,7 +57,6 @@ pipeline {
                 flask run --host=0.0.0.0
                 '''                
             }
-        }
-    
+        }    
     }
 }

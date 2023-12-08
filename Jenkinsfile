@@ -20,7 +20,10 @@ pipeline {
         stage("Install Dependencies") {
             steps {
                 echo "Installing dependencies"
-                sh 'pip install -r requirements.txt'
+                sh '''#!/bin/bash
+                source venv/bin/activate
+                pip install -r requirements.txt
+                '''                
             }
         }        
 
@@ -29,8 +32,11 @@ pipeline {
              scannerHome = tool 'vol-sonar-scanner'
             }
             steps{
-            withSonarQubeEnv('vol-sonarqube-server') { 
-            sh "${scannerHome}/bin/sonar-scanner"
+            withSonarQubeEnv('vol-sonarqube-server') {
+                sh '''#!/bin/bash
+                    source venv/bin/activate
+                    ${scannerHome}/bin/sonar-scanner
+                    '''        
             }
             }            
         }  
@@ -48,14 +54,13 @@ pipeline {
             }
         }
 
-
         stage("Deploy") {
             steps {
                 echo "Deploying Flask application"
-                sh '''
+                sh '''#!/bin/bash
                 source venv/bin/activate
                 flask run --host=0.0.0.0
-                '''                
+                '''                                
             }
         }    
     }

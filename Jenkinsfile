@@ -30,6 +30,7 @@ pipeline {
         stage('SonarQube analysis') {
             environment{
              scannerHome = tool 'vol-sonar-scanner'
+             SONAR_SCANNER_OPTS = "-Xmx512m -Xms128m" // Setting heap space
             }
             steps{
             withSonarQubeEnv('vol-sonarqube-server') {

@@ -10,7 +10,7 @@ pipeline {
         stage("Setup python env") {
             steps {
                 echo "Setting up Python virtual environment"
-                sh '''
+                sh '''#!/bin/bash
                 python3 -m venv venv
                 source venv/bin/activate
                 '''
@@ -47,7 +47,7 @@ pipeline {
                 }   
             }
         }
-                
+
 
         stage("Deploy") {
             steps {

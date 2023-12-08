@@ -22,15 +22,7 @@ pipeline {
         //         echo "Installing dependencies"
         //         sh 'pip install -r requirements.txt'
         //     }
-        // }
-
-
-        stage("Test") {
-            steps {
-                echo "Running tests"
-                // Add your Python test commands here
-            }
-        }
+        // }        
 
         stage('SonarQube analysis') {
             environment{
@@ -40,9 +32,21 @@ pipeline {
             withSonarQubeEnv('vol-sonarqube-server') { 
             sh "${scannerHome}/bin/sonar-scanner"
             }
+            }            
+        }  
+
+        stage("Quality Gate"){
+            steps{
+                script{
+                    timeout(time: 1, unit: 'HOURS') { 
+                        def qg = waitForQualityGate() 
+                        if (qg.status != 'OK') {
+                        error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                        }
+                    }
+                }   
             }
-            
-        }        
+        }
 
     //     stage("Deploy") {
     //         steps {
@@ -54,5 +58,5 @@ pipeline {
     //         }
     //     }
     // }
-}
+    }
 }

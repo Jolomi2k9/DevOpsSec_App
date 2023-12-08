@@ -41,6 +41,7 @@ pipeline {
             sh "${scannerHome}/bin/sonar-scanner"
             }
             }
+            
         }        
 
     //     stage("Deploy") {

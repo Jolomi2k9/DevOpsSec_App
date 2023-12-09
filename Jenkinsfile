@@ -60,7 +60,7 @@ pipeline {
                 sh '''#!/bin/bash
                 source venv/bin/activate
                 export FLASK_APP=main.py
-                flask run --host=0.0.0.0
+                nohup gunicorn -w 4 -b 0.0.0.0:8000 main:app &
                 sleep 10               
                 '''                                
             }

@@ -1,3 +1,4 @@
+def registry = 'https://volun2k9.jfrog.io/'
 pipeline {
     agent {
         node {
@@ -66,9 +67,8 @@ pipeline {
                     echo '<--------------- Wheel Build Complete --------------->'
                 }
             }
-        }       
+        } 
 
-        def registry = 'https://volun2k9.jfrog.io/'
         stage("Flask app Publish") {
             steps {
                 script {

@@ -52,18 +52,57 @@ pipeline {
         //             }
         //         }   
         //     }
-        // }
+        // }        
 
-        stage("Deploy") {
+        stage('Build Wheel') {
             steps {
-                echo "Deploying Flask application"
-                sh '''#!/bin/bash
-                source venv/bin/activate
-                gunicorn -w 4 -b 0.0.0.0:5000 main:app &
-                disown -h $!
-                sleep 20               
-                '''                                
+                script {
+                    echo '<--------------- Wheel Build Start --------------->'
+                    sh '''#!/bin/bash
+                    source venv/bin/activate
+                    pip install wheel
+                    python setup.py bdist_wheel
+                    '''
+                    echo '<--------------- Wheel Build Complete --------------->'
+                }
             }
-        }    
+        }       
+
+        def registry = 'https://volun2k9.jfrog.io/'
+        stage("Flask app Publish") {
+            steps {
+                script {
+                    echo '<--------------- Flask app Publish Start --------------->'
+                    def server = Artifactory.newServer(url: registry + "/artifactory", credentialsId: "artifact-cred")
+                    def properties = "buildid=\${env.BUILD_ID};commitid=\${GIT_COMMIT}"
+                    def uploadSpec = """{
+                        "files": [
+                            {
+                            "pattern": "dist/*.whl",
+                            "target": "vol-pypi-local/",
+                            "flat": "true",
+                            "props" : "${properties}"
+                            }
+                        ]
+                    }"""
+                    def buildInfo = server.upload(uploadSpec)
+                    buildInfo.env.collect()
+                    server.publishBuildInfo(buildInfo)
+                    echo '<--------------- Flask app Publish Ends --------------->'  
+                }
+            }   
+        }
+
+        // stage("Deploy") {
+        //     steps {
+        //         echo "Deploying Flask application"
+        //         sh '''#!/bin/bash
+        //         source venv/bin/activate
+        //         gunicorn -w 4 -b 0.0.0.0:5000 main:app &
+        //         disown -h $!
+        //         sleep 20               
+        //         '''                                
+        //     }
+        // }    
     }
 }

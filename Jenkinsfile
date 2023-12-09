@@ -59,7 +59,7 @@ pipeline {
                 echo "Deploying Flask application"
                 sh '''#!/bin/bash
                 source venv/bin/activate
-                nohup gunicorn --bind 0.0.0.0:5000 main:app > /dev/null 2>&1 &              
+                nohup gunicorn --bind 0.0.0.0:5000 main:app              
                 '''                                
             }
         }    

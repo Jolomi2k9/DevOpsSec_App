@@ -60,7 +60,8 @@ pipeline {
                 sh '''#!/bin/bash
                 source venv/bin/activate
                 export FLASK_APP=main.py
-                nohup flask run --host=0.0.0.0 > /dev/null 2>&1 &              
+                flask run --host=0.0.0.0
+                sleep 10               
                 '''                                
             }
         }    

@@ -59,7 +59,6 @@ pipeline {
                 echo "Deploying Flask application"
                 sh '''#!/bin/bash
                 source venv/bin/activate
-                export FLASK_APP=main.py
                 nohup gunicorn -w 4 -b 0.0.0.0:5000 main:app > gunicorn.log 2>&1 &
                 sleep 10               
                 '''                                

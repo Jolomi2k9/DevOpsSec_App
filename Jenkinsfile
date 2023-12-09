@@ -59,8 +59,9 @@ pipeline {
                 echo "Deploying Flask application"
                 sh '''#!/bin/bash
                 source venv/bin/activate
-                screen -dmS gunicorn_session bash -c 'gunicorn -w 4 -b 0.0.0.0:5000 main:app'
-                sleep 10               
+                gunicorn -w 4 -b 0.0.0.0:5000 main:app &
+                disown -h $!
+                sleep 20               
                 '''                                
             }
         }    

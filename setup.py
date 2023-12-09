@@ -1,7 +1,10 @@
 from setuptools import setup
 
 # Read requirements.txt and use its contents as the install requirements
-with open('requirements.txt', 'r', 'utf-8-sig') as f:
+# with open('requirements.txt', 'r', 'utf-8-sig') as f:
+#     requirements = f.read().splitlines()
+
+with open('requirements.txt', encoding='utf-8-sig') as f:
     requirements = f.read().splitlines()
 
 setup(

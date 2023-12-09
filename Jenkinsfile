@@ -1,4 +1,6 @@
 def registry = 'https://volun2k9.jfrog.io/'
+def imageName = 'volun2k9.jfrog.io/vol2k9-docker-local/Volun2k9App'
+def version   = '0.1.0'
 pipeline {
     agent {
         node {
@@ -91,6 +93,29 @@ pipeline {
                     echo '<--------------- Flask app Publish Ends --------------->'  
                 }
             }   
+        }
+
+        
+        stage(" Docker Build ") {
+            steps {
+                script {
+                echo '<--------------- Docker Build Started --------------->'
+                app = docker.build(imageName+":"+version)
+                echo '<--------------- Docker Build Ends --------------->'
+                }
+            }
+        }
+
+        stage (" Docker Publish "){
+            steps {
+                script {
+                echo '<--------------- Docker Publish Started --------------->'  
+                    docker.withRegistry(registry, 'artifact-cred'){
+                        app.push()
+                    }    
+                echo '<--------------- Docker Publish Ended --------------->'  
+                }
+            }
         }
 
         // stage("Deploy") {

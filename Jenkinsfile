@@ -60,7 +60,7 @@ pipeline {
                 sh '''#!/bin/bash
                 source venv/bin/activate
                 # Run Gunicorn server with flask app
-                gunicorn --bind 0.0.0.0:5000 main:app                
+                gunicorn --bind 0.0.0.0:5000 main:app &                
                 '''                                
             }
         }    

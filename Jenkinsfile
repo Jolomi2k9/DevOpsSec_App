@@ -59,8 +59,7 @@ pipeline {
                 echo "Deploying Flask application"
                 sh '''#!/bin/bash
                 source venv/bin/activate
-                export FLASK_APP=main.py
-                flask run --host=0.0.0.0 &              
+                nohup gunicorn --bind 0.0.0.0:5000 main:app > /dev/null 2>&1 &              
                 '''                                
             }
         }    

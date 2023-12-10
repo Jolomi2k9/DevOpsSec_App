@@ -13,22 +13,22 @@ pipeline {
         stage("Setup python env") {
             steps {
                 echo "Setting up Python virtual environment"
-                // sh '''#!/bin/bash
-                // python3 -m venv venv
-                // source venv/bin/activate
-                // '''
+                sh '''#!/bin/bash
+                python3 -m venv venv
+                source venv/bin/activate
+                '''
             }
         }
 
-        // stage("Install Dependencies") {
-        //     steps {
-        //         echo "Installing dependencies"
-        //         sh '''#!/bin/bash
-        //         source venv/bin/activate
-        //         pip install -r requirements.txt
-        //         '''                
-        //     }
-        // }        
+        stage("Install Dependencies") {
+            steps {
+                echo "Installing dependencies"
+                sh '''#!/bin/bash
+                source venv/bin/activate
+                pip install -r requirements.txt
+                '''                
+            }
+        }        
 
         // stage('SonarQube analysis') {
         //     environment{

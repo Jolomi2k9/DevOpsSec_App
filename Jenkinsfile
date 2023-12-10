@@ -30,32 +30,32 @@ pipeline {
         //     }
         // }        
 
-        // stage('SonarQube analysis') {
-        //     environment{
-        //      scannerHome = tool 'vol-sonar-scanner'             
-        //     }
-        //     steps{
-        //     withSonarQubeEnv('vol-sonarqube-server') {
-        //         sh '''#!/bin/bash
-        //             source venv/bin/activate
-        //             ${scannerHome}/bin/sonar-scanner
-        //             '''        
-        //     }
-        //     }            
-        // }  
+        stage('SonarQube analysis') {
+            environment{
+             scannerHome = tool 'vol-sonar-scanner'             
+            }
+            steps{
+            withSonarQubeEnv('vol-sonarqube-server') {
+                sh '''#!/bin/bash
+                    source venv/bin/activate
+                    ${scannerHome}/bin/sonar-scanner
+                    '''        
+            }
+            }            
+        }  
 
-        // stage("Quality Gate"){
-        //     steps{
-        //         script{
-        //             timeout(time: 1, unit: 'HOURS') { 
-        //                 def qg = waitForQualityGate() 
-        //                 if (qg.status != 'OK') {
-        //                 error "Pipeline aborted due to quality gate failure: ${qg.status}"
-        //                 }
-        //             }
-        //         }   
-        //     }
-        // }        
+        stage("Quality Gate"){
+            steps{
+                script{
+                    timeout(time: 1, unit: 'HOURS') { 
+                        def qg = waitForQualityGate() 
+                        if (qg.status != 'OK') {
+                        error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                        }
+                    }
+                }   
+            }
+        }        
 
         // stage('Build Wheel') {
         //     steps {

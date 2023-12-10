@@ -28,8 +28,7 @@ pipeline {
                 pip install -r requirements.txt
                 '''                
             }
-        }
-               
+        }               
 
         // stage('SonarQube analysis') {
         //     environment{

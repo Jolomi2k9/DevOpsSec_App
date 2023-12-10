@@ -118,16 +118,14 @@ pipeline {
             }
         }
 
-        // stage("Deploy") {
-        //     steps {
-        //         echo "Deploying Flask application"
-        //         sh '''#!/bin/bash
-        //         source venv/bin/activate
-        //         gunicorn -w 4 -b 0.0.0.0:5000 main:app &
-        //         disown -h $!
-        //         sleep 20               
-        //         '''                                
-        //     }
-        // }    
+        stage("Deploy") {
+            steps {                
+                script {                  
+                    sh '''#!/bin/bash
+                    ./deploy.sh
+                '''                  
+                }                                
+            }
+        }    
     }
 }

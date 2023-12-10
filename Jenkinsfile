@@ -30,70 +30,70 @@ pipeline {
         //     }
         // }        
 
-        stage('SonarQube analysis') {
-            environment{
-             scannerHome = tool 'vol-sonar-scanner'             
-            }
-            steps{
-            withSonarQubeEnv('vol-sonarqube-server') {
-                sh '''#!/bin/bash
-                    source venv/bin/activate
-                    ${scannerHome}/bin/sonar-scanner
-                    '''        
-            }
-            }            
-        }  
-
-        stage("Quality Gate"){
-            steps{
-                script{
-                    timeout(time: 1, unit: 'HOURS') { 
-                        def qg = waitForQualityGate() 
-                        if (qg.status != 'OK') {
-                        error "Pipeline aborted due to quality gate failure: ${qg.status}"
-                        }
-                    }
-                }   
-            }
-        }        
-
-        // stage('Build Wheel') {
-        //     steps {
-        //         script {
-        //             echo '<--------------- Wheel Build Start --------------->'
-        //             sh '''#!/bin/bash
-        //             source venv/bin/activate
-        //             pip install wheel
-        //             python setup.py bdist_wheel
-        //             '''
-        //             echo '<--------------- Wheel Build Complete --------------->'
-        //         }
+        // stage('SonarQube analysis') {
+        //     environment{
+        //      scannerHome = tool 'vol-sonar-scanner'             
         //     }
-        // } 
+        //     steps{
+        //     withSonarQubeEnv('vol-sonarqube-server') {
+        //         sh '''#!/bin/bash
+        //             source venv/bin/activate
+        //             ${scannerHome}/bin/sonar-scanner
+        //             '''        
+        //     }
+        //     }            
+        // }  
 
-        // stage("Flask app Publish") {
-        //     steps {
-        //         script {
-        //             echo '<--------------- Flask app Publish Start --------------->'
-        //             def server = Artifactory.newServer(url: registry + "/artifactory", credentialsId: "artifact-cred")
-        //             def properties = "buildid=\${env.BUILD_ID};commitid=\${GIT_COMMIT}"
-        //             def uploadSpec = """{
-        //                 "files": [
-        //                     {
-        //                     "pattern": "dist/*.whl",
-        //                     "target": "vol-pypi-local/",
-        //                     "flat": "true",
-        //                     "props" : "${properties}"
-        //                     }
-        //                 ]
-        //             }"""
-        //             def buildInfo = server.upload(uploadSpec)
-        //             buildInfo.env.collect()
-        //             server.publishBuildInfo(buildInfo)
-        //             echo '<--------------- Flask app Publish Ends --------------->'  
-        //         }
-        //     }   
-        // }
+        // stage("Quality Gate"){
+        //     steps{
+        //         script{
+        //             timeout(time: 1, unit: 'HOURS') { 
+        //                 def qg = waitForQualityGate() 
+        //                 if (qg.status != 'OK') {
+        //                 error "Pipeline aborted due to quality gate failure: ${qg.status}"
+        //                 }
+        //             }
+        //         }   
+        //     }
+        // }        
+
+        stage('Build Wheel') {
+            steps {
+                script {
+                    echo '<--------------- Wheel Build Start --------------->'
+                    sh '''#!/bin/bash
+                    source venv/bin/activate
+                    pip install wheel
+                    python setup.py bdist_wheel
+                    '''
+                    echo '<--------------- Wheel Build Complete --------------->'
+                }
+            }
+        } 
+
+        stage("Flask app Publish") {
+            steps {
+                script {
+                    echo '<--------------- Flask app Publish Start --------------->'
+                    def server = Artifactory.newServer(url: registry + "/artifactory", credentialsId: "artifact-cred")
+                    def properties = "buildid=\${env.BUILD_ID};commitid=\${GIT_COMMIT}"
+                    def uploadSpec = """{
+                        "files": [
+                            {
+                            "pattern": "dist/*.whl",
+                            "target": "vol-pypi-local/",
+                            "flat": "true",
+                            "props" : "${properties}"
+                            }
+                        ]
+                    }"""
+                    def buildInfo = server.upload(uploadSpec)
+                    buildInfo.env.collect()
+                    server.publishBuildInfo(buildInfo)
+                    echo '<--------------- Flask app Publish Ends --------------->'  
+                }
+            }   
+        }
 
         
         // stage(" Docker Build ") {

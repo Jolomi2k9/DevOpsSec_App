@@ -60,7 +60,7 @@ pipeline {
         stage('Start Web Application') {
             steps {
                 script {
-                    sh '''
+                    sh '''#!/bin/bash
                         # Start the web application in the background
                         source venv/bin/activate
                         nohup flask run --host=0.0.0.0 &
@@ -84,7 +84,7 @@ pipeline {
         stage('Selenium Tests') {
             steps {
                 script {
-                    sh '''
+                    sh '''#!/bin/bash
                         # Run Selenium tests
                         source venv/bin/activate
                         python -m unittest discover -s tests -p "test_selenium.py" --buffer --resultxml=results.xml
@@ -97,7 +97,7 @@ pipeline {
         stage('Stop Web Application') {
             steps {
                 script {
-                    sh '''
+                    sh '''#!/bin/bash
                         # Find flask run process and kill it
                         pkill -f "flask run"
                     '''

@@ -14,6 +14,8 @@ def create_log_file():
 class FlaskAppTest(unittest.TestCase):
 
     def setUp(self):
+
+        create_log_file()
         # Print the current working directory before setting up the Chrome webdriver
         print("Current working directory before webdriver setup:", os.getcwd())
 

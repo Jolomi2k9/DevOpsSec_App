@@ -55,76 +55,132 @@ pipeline {
         //             }
         //         }   
         //     }
-        // }        
+        // }
 
-        stage('Build Wheel') {
+        stage('Start Web Application') {
             steps {
                 script {
-                    echo '<--------------- Wheel Build Start --------------->'
-                    sh '''#!/bin/bash
-                    source venv/bin/activate
-                    pip install wheel
-                    python setup.py bdist_wheel
+                    sh '''
+                        # Start the web application in the background
+                        source venv/bin/activate
+                        nohup flask run --host=0.0.0.0 &
+
+                        # Wait for the web application to start
+                        COUNTER=0
+                        while ! nc -z localhost 5000; do   
+                        sleep 1
+                        COUNTER=$((COUNTER+1))
+                        if [ $COUNTER -ge 30 ]; then
+                            echo "Failed to start web application on port 5000"
+                            exit 1
+                        fi
+                        done
+                        echo "Web application is up and running"
                     '''
-                    echo '<--------------- Wheel Build Complete --------------->'
                 }
             }
-        } 
+        }
 
-        stage("Flask app Publish") {
+        stage('Selenium Tests') {
             steps {
                 script {
-                    echo '<--------------- Flask app Publish Start --------------->'
-                    def server = Artifactory.newServer(url: registry + "/artifactory", credentialsId: "artifact-cred")
-                    def properties = "buildid=\${env.BUILD_ID};commitid=\${GIT_COMMIT}"
-                    def uploadSpec = """{
-                        "files": [
-                            {
-                            "pattern": "dist/*.whl",
-                            "target": "vol-pypi-local/",
-                            "flat": "true",
-                            "props" : "${properties}"
-                            }
-                        ]
-                    }"""
-                    def buildInfo = server.upload(uploadSpec)
-                    buildInfo.env.collect()
-                    server.publishBuildInfo(buildInfo)
-                    echo '<--------------- Flask app Publish Ends --------------->'  
+                    sh '''
+                        # Run Selenium tests
+                        source venv/bin/activate
+                        python -m unittest discover -s tests -p "test_selenium.py" --buffer --resultxml=results.xml
+                        junit 'results.xml'
+                    '''
                 }
-            }   
+            }
         }
+
+        stage('Stop Web Application') {
+            steps {
+                script {
+                    sh '''
+                        # Find flask run process and kill it
+                        pkill -f "flask run"
+                    '''
+                }
+            }
+        }
+
+        // stage('Manual Approval') {
+        //     steps {
+        //         script {
+        //             input message: 'Approve Deployment?', ok: 'Deploy'
+        //         }
+        //     }
+        // }         
+
+        // stage('Build Wheel') {
+        //     steps {
+        //         script {
+        //             echo '<--------------- Wheel Build Start --------------->'
+        //             sh '''#!/bin/bash
+        //             source venv/bin/activate
+        //             pip install wheel
+        //             python setup.py bdist_wheel
+        //             '''
+        //             echo '<--------------- Wheel Build Complete --------------->'
+        //         }
+        //     }
+        // } 
+
+        // stage("Flask app Publish") {
+        //     steps {
+        //         script {
+        //             echo '<--------------- Flask app Publish Start --------------->'
+        //             def server = Artifactory.newServer(url: registry + "/artifactory", credentialsId: "artifact-cred")
+        //             def properties = "buildid=\${env.BUILD_ID};commitid=\${GIT_COMMIT}"
+        //             def uploadSpec = """{
+        //                 "files": [
+        //                     {
+        //                     "pattern": "dist/*.whl",
+        //                     "target": "vol-pypi-local/",
+        //                     "flat": "true",
+        //                     "props" : "${properties}"
+        //                     }
+        //                 ]
+        //             }"""
+        //             def buildInfo = server.upload(uploadSpec)
+        //             buildInfo.env.collect()
+        //             server.publishBuildInfo(buildInfo)
+        //             echo '<--------------- Flask app Publish Ends --------------->'  
+        //         }
+        //     }   
+        // }
         
-        stage(" Docker Build ") {
-            steps {
-                script {
-                echo '<--------------- Docker Build Started --------------->'
-                app = docker.build(imageName+":"+version)
-                echo '<--------------- Docker Build Ends --------------->'
-                }
-            }
-        }
+        // stage(" Docker Build ") {
+        //     steps {
+        //         script {
+        //         echo '<--------------- Docker Build Started --------------->'
+        //         app = docker.build(imageName+":"+version)
+        //         echo '<--------------- Docker Build Ends --------------->'
+        //         }
+        //     }
+        // }
 
-        stage (" Docker Publish "){
-            steps {
-                script {
-                echo '<--------------- Docker Publish Started --------------->'  
-                    docker.withRegistry(registry, 'artifact-cred'){
-                        app.push()
-                    }    
-                echo '<--------------- Docker Publish Ended --------------->'  
-                }
-            }
-        }
+        // stage (" Docker Publish "){
+        //     steps {
+        //         script {
+        //         echo '<--------------- Docker Publish Started --------------->'  
+        //             docker.withRegistry(registry, 'artifact-cred'){
+        //                 app.push()
+        //             }    
+        //         echo '<--------------- Docker Publish Ended --------------->'  
+        //         }
+        //     }
+        // }
 
-        stage("Deploy") {
-            steps {                
-                script {                  
-                    sh '''#!/bin/bash
-                    ./deploy.sh
-                '''                  
-                }                                
-            }
-        }    
+        // stage("Deploy") {
+        //     steps {                
+        //         script {                  
+        //             sh '''#!/bin/bash
+        //             ./deploy.sh
+        //         '''                  
+        //         }                                
+        //     }
+        // }    
     }
 }

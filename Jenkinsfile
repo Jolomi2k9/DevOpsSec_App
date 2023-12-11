@@ -88,8 +88,7 @@ pipeline {
                     sh '''#!/bin/bash
                         # Run Selenium tests
                         source venv/bin/activate
-                        python -m unittest discover -s tests -p "test_selenium.py" --buffer --resultxml=results.xml
-                        junit 'results.xml'
+                        python -m unittest discover -s tests -p "test_selenium.py" 
                     '''
                 }
             }

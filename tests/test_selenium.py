@@ -9,6 +9,8 @@ import unittest
 class FlaskAppTest(unittest.TestCase):
 
     def setUp(self):
+        # Print the current working directory before setting up the Chrome webdriver
+        print("Current working directory before webdriver setup:", os.getcwd())
 
         options = Options()
         options.headless = True
@@ -24,6 +26,9 @@ class FlaskAppTest(unittest.TestCase):
   
         # Using webdriver_manager to manage the driver
         self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+
+         # Print the current working directory after setting up the Chrome webdriver
+        print("Current working directory after webdriver setup:", os.getcwd())
 
     def test_title(self):        
         expected_title = "Volunteer app"

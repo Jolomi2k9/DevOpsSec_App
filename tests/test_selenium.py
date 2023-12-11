@@ -21,16 +21,21 @@ class FlaskAppTest(unittest.TestCase):
         options.add_argument('--no-first-run')
         options.add_argument('--disable-extensions')
         options.add_argument('--verbose')
+        # options.add_argument('--log-path=/home/ubuntu/jenkins/workspace/voluntApp-multibranch_main/chromedriver.log')
+        # Enable verbose logging for ChromeDriver
+        chrome_service = Service(ChromeDriverManager().install())
         options.add_argument('--log-path=/home/ubuntu/jenkins/workspace/voluntApp-multibranch_main/chromedriver.log')
-
+        
         # driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
 
   
         # Using webdriver_manager to manage the driver
-        self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+        # self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+        self.driver = webdriver.Chrome(service=chrome_service, options=options)
 
          # Print the current working directory after setting up the Chrome webdriver
         print("Current working directory after webdriver setup:", os.getcwd())
+        print("ChromeDriver log:", chrome_service.log_path)
 
     def test_title(self):        
         expected_title = "Volunteer app"

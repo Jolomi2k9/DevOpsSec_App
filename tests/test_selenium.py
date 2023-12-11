@@ -2,8 +2,8 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-driver = webdriver.Chrome(ChromeDriverManager().install())
 import unittest
+import os
 
 
 class FlaskAppTest(unittest.TestCase):
@@ -22,6 +22,8 @@ class FlaskAppTest(unittest.TestCase):
         options.add_argument('--disable-extensions')
         options.add_argument('--verbose')
         options.add_argument('--log-path=chromedriver.log')
+
+        # driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
 
   
         # Using webdriver_manager to manage the driver

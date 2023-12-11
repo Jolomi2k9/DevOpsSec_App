@@ -82,36 +82,42 @@ pipeline {
             }
         }
 
-        stage('Selenium Tests') {
-            steps {
-                script {
-                    sh '''#!/bin/bash
-                        # Run Selenium tests
-                        source venv/bin/activate
-                        python -m unittest discover -s tests -p "test_selenium.py" 
-                    '''
-                }
-            }
-        }
-
-        stage('Stop Web Application') {
-            steps {
-                script {
-                    sh '''#!/bin/bash
-                        # Find flask run process and kill it
-                        pkill -f "flask run"
-                    '''
-                }
-            }
-        }
-
-        // stage('Manual Approval') {
+        // stage('Selenium Tests') {
         //     steps {
         //         script {
-        //             input message: 'Approve Deployment?', ok: 'Deploy'
+        //             sh '''#!/bin/bash
+        //                 # Run Selenium tests
+        //                 source venv/bin/activate
+        //                 python -m unittest discover -s tests -p "test_selenium.py" 
+        //             '''
         //         }
         //     }
-        // }         
+        // }
+
+        // stage('Stop Web Application') {
+        //     steps {
+        //         script {
+        //             sh '''#!/bin/bash
+        //                 # Find flask run process and kill it
+        //                 pkill -f "flask run"
+        //             '''
+        //         }
+        //     }
+        // }       
+          
+
+        stage('Manual Approval') {
+            steps {
+                script {
+                    input message: 'Approve Deployment?', ok: 'Deploy'
+                    mail(
+                        to: 'otikene236@gmail.com',
+                        subject: 'Manual Approval Needed',
+                        body: 'Please review and approve the pending deployment ASAP'
+                    )
+                }
+            }
+        }       
 
         // stage('Build Wheel') {
         //     steps {

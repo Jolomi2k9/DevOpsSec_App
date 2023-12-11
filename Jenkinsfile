@@ -103,13 +103,11 @@ pipeline {
         //             '''
         //         }
         //     }
-        // }       
-          
+        // }
 
-        stage('Manual Approval') {
+        stage('Send Approval Email') {
             steps {
                 script {
-                    input message: 'Approve Deployment?', ok: 'Deploy'
                     mail(
                         to: 'otikene236@gmail.com',
                         subject: 'Manual Approval Needed',
@@ -117,7 +115,29 @@ pipeline {
                     )
                 }
             }
-        }       
+        }
+
+        stage('Manual Approval') {
+            steps {
+                script {
+                    input message: 'Approve Deployment?', ok: 'Deploy'
+                }
+            }
+        }        
+          
+
+        // stage('Manual Approval') {
+        //     steps {
+        //         script {
+        //             input message: 'Approve Deployment?', ok: 'Deploy'
+        //             mail(
+        //                 to: 'otikene236@gmail.com',
+        //                 subject: 'Manual Approval Needed',
+        //                 body: 'Please review and approve the pending deployment ASAP'
+        //             )
+        //         }
+        //     }
+        // }       
 
         // stage('Build Wheel') {
         //     steps {

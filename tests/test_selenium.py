@@ -21,7 +21,7 @@ class FlaskAppTest(unittest.TestCase):
         options.add_argument('--no-first-run')
         options.add_argument('--disable-extensions')
         options.add_argument('--verbose')
-        options.add_argument('--log-path=chromedriver.log')
+        options.add_argument('--log-path=/home/ubuntu/jenkins/workspace/voluntApp-multibranch_main/chromedriver.log')
 
         # driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
 

@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-driver = webdriver.Chrome(ChromeDriverManager(version="120.0.6099.71").install())
+driver = webdriver.Chrome(ChromeDriverManager().install())
 import unittest
 
 
@@ -18,6 +18,9 @@ class FlaskAppTest(unittest.TestCase):
         options.add_argument('--disable-software-rasterizer')
         options.add_argument('--no-first-run')
         options.add_argument('--disable-extensions')
+        options.add_argument('--verbose')
+        options.add_argument('--log-path=chromedriver.log')
+
   
         # Using webdriver_manager to manage the driver
         self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)

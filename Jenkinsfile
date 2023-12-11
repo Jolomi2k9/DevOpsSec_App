@@ -63,6 +63,7 @@ pipeline {
                     sh '''#!/bin/bash
                         # Start the web application in the background
                         source venv/bin/activate
+                        export FLASK_APP=main.py
                         nohup flask run --host=0.0.0.0 &
 
                         # Wait for the web application to start

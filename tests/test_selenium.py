@@ -11,6 +11,9 @@ class FlaskAppTest(unittest.TestCase):
 
         options = Options()
         options.headless = True
+        options.add_argument('--no-sandbox')  
+        options.add_argument('--disable-gpu')  
+        options.add_argument('--disable-dev-shm-usage')  
         # Using webdriver_manager to manage the driver
         self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 

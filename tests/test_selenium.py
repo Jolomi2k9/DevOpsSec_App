@@ -6,6 +6,11 @@ import unittest
 import os
 
 
+def create_log_file():
+    if not os.path.exists("chromedriver.log"):
+        with open("chromedriver.log", "w") as f:
+            f.write("Starting ChromeDriver with verbose logging...\n")
+
 class FlaskAppTest(unittest.TestCase):
 
     def setUp(self):
@@ -24,7 +29,8 @@ class FlaskAppTest(unittest.TestCase):
         # options.add_argument('--log-path=/home/ubuntu/jenkins/workspace/voluntApp-multibranch_main/chromedriver.log')
         # Enable verbose logging for ChromeDriver
         chrome_service = Service(ChromeDriverManager().install())
-        options.add_argument('--log-path=/home/ubuntu/jenkins/workspace/voluntApp-multibranch_main/chromedriver.log')
+        options.add_argument('--log-path=./chromedriver.log')
+
         
         # driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
 

@@ -1,5 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 import unittest
 
 class FlaskAppTest(unittest.TestCase):
@@ -8,7 +10,8 @@ class FlaskAppTest(unittest.TestCase):
 
         options = Options()
         options.headless = True
-        self.driver = webdriver.Chrome(options=options)
+        # Using webdriver_manager to manage the driver
+        self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
     def test_title(self):        
         expected_title = "Volunteer app"

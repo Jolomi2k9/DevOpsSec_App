@@ -77,8 +77,8 @@ class TestApp(unittest.TestCase):
         self.driver.get("http://127.0.0.1:5000")
 
         # Wait for the logo to be visible
-        logo = WebDriverWait(self.driver, 30).until(
-            EC.visibility_of_element_located((By.CSS_SELECTOR, "img[src='/static/images/logo5.png']"))
+        logo = WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, "img[src='/static/images/logo.png']"))
         )
 
         # Assert that the logo is displayed
@@ -93,7 +93,7 @@ class TestApp(unittest.TestCase):
         self.driver.quit()
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(verbosity=2)
 
    
 

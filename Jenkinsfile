@@ -1,7 +1,6 @@
 def registry = 'https://volun2k9.jfrog.io/'
 def imageName = 'volun2k9.jfrog.io/vol2k9-docker-local/volun2k9app'
 // use jenkins environmental variables to dynamically change version number
-// def version   = '0.1.1'
 def version = "0.1.${env.BUILD_NUMBER}"
 pipeline {
     agent {
@@ -59,53 +58,53 @@ pipeline {
             }
         }
 
-        // stage('Start Web Application') {
-        //     steps {
-        //         script {
-        //             sh '''#!/bin/bash
-        //                 # Start the web application in the background
-        //                 source venv/bin/activate
-        //                 export FLASK_APP=main.py
-        //                 nohup flask run --host=0.0.0.0 &
+        stage('Start Web Application') {
+            steps {
+                script {
+                    sh '''#!/bin/bash
+                        # Start the web application in the background
+                        source venv/bin/activate
+                        export FLASK_APP=main.py
+                        nohup flask run --host=0.0.0.0 &
 
-        //                 # Wait for the web application to start
-        //                 COUNTER=0
-        //                 while ! nc -z localhost 5000; do   
-        //                 sleep 1
-        //                 COUNTER=$((COUNTER+1))
-        //                 if [ $COUNTER -ge 30 ]; then
-        //                     echo "Failed to start web application on port 5000"
-        //                     exit 1
-        //                 fi
-        //                 done
-        //                 echo "Web application is up and running"
-        //             '''
-        //         }
-        //     }
-        // }
+                        # Wait for the web application to start
+                        COUNTER=0
+                        while ! nc -z localhost 5000; do   
+                        sleep 1
+                        COUNTER=$((COUNTER+1))
+                        if [ $COUNTER -ge 30 ]; then
+                            echo "Failed to start web application on port 5000"
+                            exit 1
+                        fi
+                        done
+                        echo "Web application is up and running"
+                    '''
+                }
+            }
+        }        
 
-        // stage('Selenium Tests') {
-        //     steps {
-        //         script {
-        //             sh '''#!/bin/bash
-        //                 # Run Selenium tests
-        //                 source venv/bin/activate
-        //                 python -m unittest discover -s tests -p "test_selenium.py" 
-        //             '''
-        //         }
-        //     }
-        // }
+        stage('Selenium Tests') {
+            steps {
+                script {
+                    sh '''#!/bin/bash
+                    source venv/bin/activate                    
+                    # Run Selenium tests
+                    python -m unittest discover -s tests -p "test_selenium.py"
+                    '''
+                }
+            }
+        }
 
-        // stage('Stop Web Application') {
-        //     steps {
-        //         script {
-        //             sh '''#!/bin/bash
-        //                 # Find flask run process and kill it
-        //                 pkill -f "flask run"
-        //             '''
-        //         }
-        //     }
-        // }
+        stage('Stop Web Application') {
+            steps {
+                script {
+                    sh '''#!/bin/bash
+                        # Find flask run process and kill it
+                        pkill -f "flask run"
+                    '''
+                }
+            }
+        }
 
         stage('Send Approval Email') {
             steps {
@@ -190,7 +189,6 @@ pipeline {
         stage("Deploy") {
             steps {                
                 script {
-
                     sh """
                     #!/bin/bash
                     sed -i 's/VERSION_PLACEHOLDER/${version}/g' deployment.yaml

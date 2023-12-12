@@ -1,59 +1,31 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
 import unittest
-import os
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from webdriver_manager.chrome import ChromeDriverManager
 
-
-def create_log_file():
-    if not os.path.exists("chromedriver.log"):
-        with open("chromedriver.log", "w") as f:
-            f.write("Starting ChromeDriver with verbose logging...\n")
-
-class FlaskAppTest(unittest.TestCase):
+class TestApp(unittest.TestCase):
 
     def setUp(self):
-
-        create_log_file()
-        # Print the current working directory before setting up the Chrome webdriver
-        print("Current working directory before webdriver setup:", os.getcwd())
-
+        # Initialize Chrome WebDriver using ChromeDriverManager
         options = Options()
-        options.headless = True
-        options.add_argument('--no-sandbox')  
-        options.add_argument('--disable-gpu')  
-        options.add_argument('--disable-dev-shm-usage')
-        options.add_argument('--disable-software-rasterizer')
-        options.add_argument('--no-first-run')
-        options.add_argument('--disable-extensions')
-        options.add_argument('--verbose')
-        # options.add_argument('--log-path=/home/ubuntu/jenkins/workspace/voluntApp-multibranch_main/chromedriver.log')
-        # Enable verbose logging for ChromeDriver
-        chrome_service = Service(ChromeDriverManager().install())
-        options.add_argument('--log-path=./chromedriver.log')
+        options.headless = True  # Run in headless mode
+        self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
-        
-        # driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
-
-  
-        # Using webdriver_manager to manage the driver
-        # self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-        self.driver = webdriver.Chrome(service=chrome_service, options=options)
-
-         # Print the current working directory after setting up the Chrome webdriver
-        print("Current working directory after webdriver setup:", os.getcwd())
-        print("ChromeDriver log:", chrome_service.log_path)
-
-    def test_title(self):        
+    def test_title(self):
+        # Define the expected title of the page
         expected_title = "Volunteer app"
+        # Navigate to the application URL
         self.driver.get("http://127.0.0.1:5000")
+        # Assert that the title is as expected
         self.assertIn(expected_title, self.driver.title)
 
     def tearDown(self):
-        # stop the driver after the test suite is completed.
+        # Close the browser window
         self.driver.quit()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
 

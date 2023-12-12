@@ -18,14 +18,28 @@ class TestApp(unittest.TestCase):
         
         # Initialize Chrome WebDriver using ChromeDriverManager
         self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-
-    def test_title(self):
-        # Define the expected title of the page
-        expected_title = "Volunteer app"
-        # Navigate to the application URL
+    #test if navbar titles are as expected
+    def test_title(self):        
+        # go to the application URL
         self.driver.get("http://127.0.0.1:5000")
-        # Assert that the title is as expected
+        # Check if links work by clicking on it
+        about_link = self.driver.find_element(By.LINK_TEXT, "About")
+        about_link.click()
+        # Wait for the page to load and check if title correct
+        expected_title = "About"
         self.assertIn(expected_title, self.driver.title)
+    #test to verify if links in the navbar works
+    def test_navbar_links(self):
+        # go to the application URL
+        self.driver.get("http://127.0.0.1:5000")
+        links = self.driver.find_elements(By.CSS_SELECTOR, "nav .navbar-nav li a")
+        #loop through nav bar links and click
+        for link in links:
+            href = link.get_attribute("href")
+            link.click()
+            self.assertEqual(self.driver.current_url, href)
+            self.driver.back()
+
 
     def tearDown(self):
         # Close the browser window

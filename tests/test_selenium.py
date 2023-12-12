@@ -37,13 +37,13 @@ class TestApp(unittest.TestCase):
         # go to the application URL
         self.driver.get("http://127.0.0.1:5000")
         # Find about link and click it
-        about_link = WebDriverWait(self.driver, 30).until(
+        about_link = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.LINK_TEXT, "About"))
         )
         self.scroll_to_element_and_click(about_link)
         # Wait for the page to load and check if URL is correct
         expected_url = "http://127.0.0.1:5000/about"  # Update this based on your actual URL
-        WebDriverWait(self.driver, 30).until(
+        WebDriverWait(self.driver, 10).until(
             EC.url_to_be(expected_url)
         )
         self.assertEqual(self.driver.current_url, expected_url)

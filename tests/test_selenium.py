@@ -60,17 +60,30 @@ class TestApp(unittest.TestCase):
         )
         self.assertEqual(self.driver.current_url, expected_url)
 
+    # def test_logo_is_displayed(self):
+    #     # Go to the application URL
+    #     self.driver.get("http://127.0.0.1:5000")
+
+    #     # Wait for the logo to be visible
+    #     logo = WebDriverWait(self.driver, 10).until(
+    #         EC.visibility_of_element_located((By.CSS_SELECTOR, ".navbar-brand img"))
+    #     )
+
+    #     # Assert that the logo is displayed
+    #     self.assertTrue(logo.is_displayed(), "Logo is not displayed on the page")
+
     def test_logo_is_displayed(self):
         # Go to the application URL
         self.driver.get("http://127.0.0.1:5000")
 
         # Wait for the logo to be visible
         logo = WebDriverWait(self.driver, 30).until(
-            EC.visibility_of_element_located((By.CSS_SELECTOR, ".navbar-brand img"))
+            EC.visibility_of_element_located((By.CSS_SELECTOR, "img[src='/static/images/logo.png']"))
         )
 
         # Assert that the logo is displayed
         self.assertTrue(logo.is_displayed(), "Logo is not displayed on the page")
+
 
 
 

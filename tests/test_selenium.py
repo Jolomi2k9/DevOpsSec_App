@@ -73,6 +73,7 @@ class TestApp(unittest.TestCase):
     #     self.assertTrue(logo.is_displayed(), "Logo is not displayed on the page")
 
     def test_logo_is_displayed(self):
+        print("Testing if the logo is displayed...")
         # Go to the application URL
         self.driver.get("http://127.0.0.1:5000")
 
@@ -80,9 +81,9 @@ class TestApp(unittest.TestCase):
         logo = WebDriverWait(self.driver, 10).until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, "img[src='/static/images/logo.png']"))
         )
-
         # Assert that the logo is displayed
         self.assertTrue(logo.is_displayed(), "Logo is not displayed on the page")
+        print("Logo display test completed successfully.")
 
 
 
@@ -93,7 +94,7 @@ class TestApp(unittest.TestCase):
         self.driver.quit()
 
 if __name__ == '__main__':
-    unittest.main(verbosity=2)
+    unittest.main()
 
    
 

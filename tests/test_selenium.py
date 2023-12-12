@@ -80,7 +80,7 @@ class TestApp(unittest.TestCase):
         print("join link test completed successfully.")      
 
     def test_logo_is_displayed(self):
-        print("Testing if the logo is displayed...")
+        print("Testing if the logo is displayed.")
         # Go to the application URL
         self.driver.get("http://127.0.0.1:5000")
 

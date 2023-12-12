@@ -1,4 +1,5 @@
 import unittest
+import xmlrunner
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -54,7 +55,14 @@ class TestApp(unittest.TestCase):
         self.driver.quit()
 
 if __name__ == '__main__':
-    unittest.main()
+    # directory to save test reports
+    test_report_dir = './test-reports'
+
+    # run the tests and output the results in XML 
+    with open(f"{test_report_dir}/selenium-test-results.xml", 'wb') as output:
+        unittest.main(
+            testRunner=xmlrunner.XMLTestRunner(output=output),
+            failfast=False, buffer=False, catchbreak=False)
 
 
 

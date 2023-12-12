@@ -93,7 +93,12 @@ pipeline {
                     python -m unittest discover -s tests -p "test_selenium.py"
                     '''
 
-                    echo '<--------------- Selenium Tests Start --------------->'
+                    echo '<--------------- Selenium Tests ends --------------->'
+                }
+            }
+            post {
+                always {
+                    junit 'test-reports/*.xml'
                 }
             }
         }

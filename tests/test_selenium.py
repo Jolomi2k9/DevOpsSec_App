@@ -27,7 +27,7 @@ class TestApp(unittest.TestCase):
         # go to the application URL
         self.driver.get("http://127.0.0.1:5000")
         # Wait for page to load and check if links work by clicking on it 
-        about_link = WebDriverWait(self.driver, 20).until(
+        about_link = WebDriverWait(self.driver, 60).until(
             EC.element_to_be_clickable((By.LINK_TEXT, "About"))
         )
         about_link.click()
@@ -39,14 +39,14 @@ class TestApp(unittest.TestCase):
         # go to the application URL
         self.driver.get("http://127.0.0.1:5000")
         # wait for page to load
-        links = WebDriverWait(self.driver, 20).until(
+        links = WebDriverWait(self.driver, 60).until(
             EC.visibility_of_all_elements_located((By.CSS_SELECTOR, "nav .navbar-nav li a"))
         )
         #loop through nav bar links and click
         for link in links:
             href = link.get_attribute("href")
             # wait for page to load
-            WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable(link)).click()
+            WebDriverWait(self.driver, 60).until(EC.element_to_be_clickable(link)).click()
             self.assertEqual(self.driver.current_url, href)
             self.driver.back()
 

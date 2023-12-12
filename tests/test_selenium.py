@@ -50,6 +50,14 @@ class TestApp(unittest.TestCase):
     #         self.assertEqual(self.driver.current_url, href)
     #         self.driver.back()
 
+    def scroll_to_element_and_click(self, element):
+        # Scroll element into view
+        self.driver.execute_script("arguments[0].scrollIntoView(true);", element)
+        # Wait for element to be clickable
+        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(element))
+        # Use JavaScript to click on the element
+        self.driver.execute_script("arguments[0].click();", element)
+
     def test_about_link(self):
         # go to the application URL
         self.driver.get("http://127.0.0.1:5000")
@@ -57,6 +65,7 @@ class TestApp(unittest.TestCase):
         about_link = WebDriverWait(self.driver, 30).until(
             EC.element_to_be_clickable((By.LINK_TEXT, "About"))
         )
+        self.scroll_to_element_and_click(about_link)
         about_link.click()
         # Wait for the page to load and check if URL is correct
         expected_url = "http://127.0.0.1:5000/about"  # Update this based on your actual URL
@@ -72,6 +81,7 @@ class TestApp(unittest.TestCase):
         join_link = WebDriverWait(self.driver, 30).until(
             EC.element_to_be_clickable((By.LINK_TEXT, "Join"))
         )
+        self.scroll_to_element_and_click(join_link)
         join_link.click()
         # Wait for the page to load and check if URL is correct
         expected_url = "http://127.0.0.1:5000/join"  # Update this based on your actual URL

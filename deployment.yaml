@@ -17,7 +17,7 @@ spec:
       - name: jfrogcred
       containers:
       - name:  kubeapp-rtp
-        image: volun2k9.jfrog.io/vol2k9-docker-local/volun2k9app:0.1.0
+        image: volun2k9.jfrog.io/vol2k9-docker-local/volun2k9app:VERSION_PLACEHOLDER
         imagePullPolicy: Always
         ports:
         - containerPort: 5000

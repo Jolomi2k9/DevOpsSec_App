@@ -1,6 +1,8 @@
 def registry = 'https://volun2k9.jfrog.io/'
 def imageName = 'volun2k9.jfrog.io/vol2k9-docker-local/volun2k9app'
-def version   = '0.1.1'
+// use jenkins environmental variables to dynamically change version number
+// def version   = '0.1.1'
+def version = "0.1.${env.BUILD_NUMBER}"
 pipeline {
     agent {
         node {
@@ -167,7 +169,7 @@ pipeline {
             steps {
                 script {
                 echo '<--------------- Docker Build Started --------------->'
-                app = docker.build(imageName+":"+version)
+                app = docker.build("${imageName}:${version}")
                 echo '<--------------- Docker Build Ends --------------->'
                 }
             }
@@ -178,7 +180,7 @@ pipeline {
                 script {
                 echo '<--------------- Docker Publish Started --------------->'  
                     docker.withRegistry(registry, 'artifact-cred'){
-                        app.push()
+                        app.push("${version}")
                     }    
                 echo '<--------------- Docker Publish Ended --------------->'  
                 }
@@ -187,10 +189,13 @@ pipeline {
 
         stage("Deploy") {
             steps {                
-                script {                  
-                    sh '''#!/bin/bash
+                script {
+
+                    sh """
+                    #!/bin/bash
+                    sed -i 's/VERSION_PLACEHOLDER/${version}/g' deployment.yaml
                     ./deploy.sh
-                '''                  
+                    """                                 
                 }                                
             }
         }    

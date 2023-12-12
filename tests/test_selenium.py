@@ -78,7 +78,7 @@ class TestApp(unittest.TestCase):
 
         # Wait for the logo to be visible
         logo = WebDriverWait(self.driver, 30).until(
-            EC.visibility_of_element_located((By.CSS_SELECTOR, "img[src='/static/images/logo.png']"))
+            EC.visibility_of_element_located((By.CSS_SELECTOR, "img[src='/static/images/logo5.png']"))
         )
 
         # Assert that the logo is displayed

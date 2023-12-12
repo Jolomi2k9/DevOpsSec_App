@@ -46,6 +46,7 @@ class TestApp(unittest.TestCase):
 
 
     def test_about_link(self):
+        print("Testing if about link works")
         # go to the application URL
         self.driver.get("http://127.0.0.1:5000")
         # Find about link and click it
@@ -59,18 +60,24 @@ class TestApp(unittest.TestCase):
             EC.url_to_be(expected_url)
         )
         self.assertEqual(self.driver.current_url, expected_url)
+        print("about link test completed successfully.")
 
-    # def test_logo_is_displayed(self):
-    #     # Go to the application URL
-    #     self.driver.get("http://127.0.0.1:5000")
-
-    #     # Wait for the logo to be visible
-    #     logo = WebDriverWait(self.driver, 10).until(
-    #         EC.visibility_of_element_located((By.CSS_SELECTOR, ".navbar-brand img"))
-    #     )
-
-    #     # Assert that the logo is displayed
-    #     self.assertTrue(logo.is_displayed(), "Logo is not displayed on the page")
+    def test_join_link(self):
+        print("Testing if join link works")
+        # go to the application URL
+        self.driver.get("http://127.0.0.1:5000")
+        # Find about link and click it
+        about_link = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.LINK_TEXT, "Join"))
+        )
+        self.scroll_to_element_and_click(about_link)
+        # Wait for the page to load and check if URL is correct
+        expected_url = "http://127.0.0.1:5000/join"  # Update this based on your actual URL
+        WebDriverWait(self.driver, 10).until(
+            EC.url_to_be(expected_url)
+        )
+        self.assertEqual(self.driver.current_url, expected_url)
+        print("join link test completed successfully.")      
 
     def test_logo_is_displayed(self):
         print("Testing if the logo is displayed...")

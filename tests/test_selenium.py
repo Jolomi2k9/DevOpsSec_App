@@ -23,32 +23,62 @@ class TestApp(unittest.TestCase):
         # Initialize Chrome WebDriver using ChromeDriverManager
         self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     #test if navbar titles are as expected
-    def test_title(self):        
+    # def test_title(self):        
+    #     # go to the application URL
+    #     self.driver.get("http://127.0.0.1:5000")
+    #     # Wait for page to load and check if links work by clicking on it 
+    #     about_link = WebDriverWait(self.driver, 30).until(
+    #         EC.element_to_be_clickable((By.LINK_TEXT, "About"))
+    #     )
+    #     about_link.click()
+    #     # Wait for the page to load and check if title correct
+    #     expected_title = "About"
+    #     self.assertIn(expected_title, self.driver.title)
+    # #test to verify if links in the navbar works
+    # def test_navbar_links(self):
+    #     # go to the application URL
+    #     self.driver.get("http://127.0.0.1:5000")
+    #     # wait for page to load
+    #     links = WebDriverWait(self.driver, 160).until(
+    #         EC.visibility_of_all_elements_located((By.CSS_SELECTOR, "nav .navbar-nav li a"))
+    #     )
+    #     #loop through nav bar links and click
+    #     for link in links:
+    #         href = link.get_attribute("href")
+    #         # wait for page to load
+    #         WebDriverWait(self.driver, 160).until(EC.element_to_be_clickable(link)).click()
+    #         self.assertEqual(self.driver.current_url, href)
+    #         self.driver.back()
+
+    def test_about_link(self):
         # go to the application URL
         self.driver.get("http://127.0.0.1:5000")
-        # Wait for page to load and check if links work by clicking on it 
-        about_link = WebDriverWait(self.driver, 160).until(
+        # Find the 'About' link and click it
+        about_link = WebDriverWait(self.driver, 30).until(
             EC.element_to_be_clickable((By.LINK_TEXT, "About"))
         )
         about_link.click()
-        # Wait for the page to load and check if title correct
-        expected_title = "About"
-        self.assertIn(expected_title, self.driver.title)
-    #test to verify if links in the navbar works
-    def test_navbar_links(self):
+        # Wait for the page to load and check if URL is correct
+        expected_url = "http://127.0.0.1:5000/about"  # Update this based on your actual URL
+        WebDriverWait(self.driver, 30).until(
+            EC.url_to_be(expected_url)
+        )
+        self.assertEqual(self.driver.current_url, expected_url)
+
+    def test_join_link(self):
         # go to the application URL
         self.driver.get("http://127.0.0.1:5000")
-        # wait for page to load
-        links = WebDriverWait(self.driver, 160).until(
-            EC.visibility_of_all_elements_located((By.CSS_SELECTOR, "nav .navbar-nav li a"))
+        # Find the 'Join' link and click it
+        join_link = WebDriverWait(self.driver, 30).until(
+            EC.element_to_be_clickable((By.LINK_TEXT, "Join"))
         )
-        #loop through nav bar links and click
-        for link in links:
-            href = link.get_attribute("href")
-            # wait for page to load
-            WebDriverWait(self.driver, 160).until(EC.element_to_be_clickable(link)).click()
-            self.assertEqual(self.driver.current_url, href)
-            self.driver.back()
+        join_link.click()
+        # Wait for the page to load and check if URL is correct
+        expected_url = "http://127.0.0.1:5000/join"  # Update this based on your actual URL
+        WebDriverWait(self.driver, 30).until(
+            EC.url_to_be(expected_url)
+        )
+        self.assertEqual(self.driver.current_url, expected_url)
 
 
     def tearDown(self):

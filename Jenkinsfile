@@ -1,6 +1,6 @@
 def registry = 'https://volun2k9.jfrog.io/'
 def imageName = 'volun2k9.jfrog.io/vol2k9-docker-local/volun2k9app'
-def version   = '0.1.0'
+def version   = '0.1.1'
 pipeline {
     agent {
         node {

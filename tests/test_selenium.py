@@ -5,6 +5,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 class TestApp(unittest.TestCase):
 
@@ -24,8 +26,10 @@ class TestApp(unittest.TestCase):
     def test_title(self):        
         # go to the application URL
         self.driver.get("http://127.0.0.1:5000")
-        # Check if links work by clicking on it
-        about_link = self.driver.find_element(By.LINK_TEXT, "About")
+        # Wait for page to load and check if links work by clicking on it 
+        about_link = WebDriverWait(self.driver, 20).until(
+            EC.element_to_be_clickable((By.LINK_TEXT, "About"))
+        )
         about_link.click()
         # Wait for the page to load and check if title correct
         expected_title = "About"
@@ -34,11 +38,15 @@ class TestApp(unittest.TestCase):
     def test_navbar_links(self):
         # go to the application URL
         self.driver.get("http://127.0.0.1:5000")
-        links = self.driver.find_elements(By.CSS_SELECTOR, "nav .navbar-nav li a")
+        # wait for page to load
+        links = WebDriverWait(self.driver, 20).until(
+            EC.visibility_of_all_elements_located((By.CSS_SELECTOR, "nav .navbar-nav li a"))
+        )
         #loop through nav bar links and click
         for link in links:
             href = link.get_attribute("href")
-            link.click()
+            # wait for page to load
+            WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable(link)).click()
             self.assertEqual(self.driver.current_url, href)
             self.driver.back()
 

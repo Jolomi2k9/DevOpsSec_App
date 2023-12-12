@@ -77,7 +77,7 @@ pipeline {
                             exit 1
                         fi
                         done
-                        echo "Web application is up and running"
+                        echo "Web application is running"
                     '''
                 }
             }
@@ -86,11 +86,14 @@ pipeline {
         stage('Selenium Tests') {
             steps {
                 script {
+                    echo '<--------------- Selenium Tests Start --------------->'
                     sh '''#!/bin/bash
                     source venv/bin/activate                    
                     # Run Selenium tests
                     python -m unittest discover -s tests -p "test_selenium.py"
                     '''
+
+                    echo '<--------------- Selenium Tests Start --------------->'
                 }
             }
         }
@@ -102,6 +105,7 @@ pipeline {
                         # Find flask run process and kill it
                         pkill -f "flask run"
                     '''
+                    echo '<--------------- Web application killed --------------->'
                 }
             }
         }
@@ -112,7 +116,9 @@ pipeline {
                     mail(
                         to: 'otikene236@gmail.com',
                         subject: 'Manual Approval Needed',
-                        body: 'Please review and approve the pending deployment ASAP'
+                        body: '''<p>Please review and approve the pending deployment ASAP.</p>
+                         <p>Click <a href="http://44.214.179.82:8080/job/voluntApp-multibranch/job/main/">here</a> to view the deployment.</p>''',
+                        mimeType: 'text/html'
                     )
                 }
             }

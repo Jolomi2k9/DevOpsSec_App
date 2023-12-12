@@ -55,14 +55,9 @@ class TestApp(unittest.TestCase):
         self.driver.quit()
 
 if __name__ == '__main__':
-    # directory to save test reports
-    test_report_dir = './test-reports'
+    unittest.main()
 
-    # run the tests and output the results in XML 
-    with open(f"{test_report_dir}/selenium-test-results.xml", 'wb') as output:
-        unittest.main(
-            testRunner=xmlrunner.XMLTestRunner(output=output),
-            failfast=False, buffer=False, catchbreak=False)
+   
 
 
 

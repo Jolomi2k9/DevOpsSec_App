@@ -95,12 +95,7 @@ pipeline {
 
                     echo '<--------------- Selenium Tests ends --------------->'
                 }
-            }
-            post {
-                always {
-                    junit 'test-reports/*.xml'
-                }
-            }
+            }            
         }
 
         stage('Stop Web Application') {

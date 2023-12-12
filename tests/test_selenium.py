@@ -23,15 +23,27 @@ class TestApp(unittest.TestCase):
         
         # Initialize Chrome WebDriver using ChromeDriverManager
         self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-    def scroll_to_element_and_click(self, element):
-        # scroll to view element
-        self.driver.execute_script("arguments[0].scrollIntoView(true);", element)        
-        # Re-locate element 
+
+    # def scroll_to_element_and_click(self, element):
+    #     # scroll to view element
+    #     self.driver.execute_script("arguments[0].scrollIntoView(true);", element)        
+    #     # Re-locate element 
+    #     element = WebDriverWait(self.driver, 10).until(
+    #         EC.element_to_be_clickable(element)
+    #     )        
+    #     # Use javaScript to click 
+    #     self.driver.execute_script("arguments[0].click();", element)
+
+    def scroll_to_element_and_click(self, element_locator):
+        # Wait for the element to be clickable
         element = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable(element)
-        )        
-        # Use javaScript to click 
+            EC.element_to_be_clickable(element_locator)
+        )
+        # Scroll to the element
+        self.driver.execute_script("arguments[0].scrollIntoView(true);", element)
+        # Use JavaScript to click on the element
         self.driver.execute_script("arguments[0].click();", element)
+
 
     def test_about_link(self):
         # go to the application URL
@@ -47,6 +59,19 @@ class TestApp(unittest.TestCase):
             EC.url_to_be(expected_url)
         )
         self.assertEqual(self.driver.current_url, expected_url)
+
+    def test_logo_is_displayed(self):
+        # Go to the application URL
+        self.driver.get("http://127.0.0.1:5000")
+
+        # Wait for the logo to be visible
+        logo = WebDriverWait(self.driver, 30).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, ".navbar-brand img"))
+        )
+
+        # Assert that the logo is displayed
+        self.assertTrue(logo.is_displayed(), "Logo is not displayed on the page")
+
 
 
 
